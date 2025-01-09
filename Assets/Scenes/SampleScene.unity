@@ -225,7 +225,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.7
+  m_Radius: 0.75
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -347,13 +347,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 5.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &753026891
 GameObject:
   m_ObjectHideFlags: 0
@@ -380,7 +380,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 753026891}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 2
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -415,6 +415,7 @@ Transform:
   - {fileID: 246834684}
   - {fileID: 1539345242}
   - {fileID: 648931217}
+  - {fileID: 1877250108}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &753026894
@@ -430,9 +431,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 7
-  playerHeight: 2
-  groundDrag: 5
-  ground:
+  groundDrag: 6
+  jumpForce: 10
+  jumpCooldown: 0.4
+  airMultiplier: 0.4
+  jumpKey: 32
+  groundCheck: {fileID: 1877250108}
+  groundDistance: 0.2
+  whatIsGround:
     serializedVersion: 2
     m_Bits: 128
   orientation: {fileID: 1539345242}
@@ -574,10 +580,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   width: 10
-  height: 5
+  height: 10
   tilePrefab: {fileID: 6050652358302095841, guid: c699ff7b1a196614fa89f3ed11500792, type: 3}
   wallPrefab: {fileID: -591923025811826050, guid: 1cf49b4b5b09848479c79a2bcc593912, type: 3}
   floorPrefab: {fileID: 1271099116052042051, guid: c8ecacc1398b54045ad3d9d6f21aa920, type: 3}
+  lightPosition: {fileID: 705507995}
   player: {fileID: 753026893}
   playerRB: {fileID: 753026891}
 --- !u!4 &1006166404
@@ -672,11 +679,42 @@ Transform:
   - {fileID: 963194228}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1877250107
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1877250108}
+  m_Layer: 0
+  m_Name: GroundCHeck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1877250108
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1877250107}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 753026893}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 705507995}
   - {fileID: 1006166404}
+  - {fileID: 705507995}
   - {fileID: 1570764011}
   - {fileID: 753026893}
