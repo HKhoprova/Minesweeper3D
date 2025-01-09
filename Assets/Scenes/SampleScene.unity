@@ -225,7 +225,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.7
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -364,9 +364,10 @@ GameObject:
   m_Component:
   - component: {fileID: 753026893}
   - component: {fileID: 753026892}
+  - component: {fileID: 753026894}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -416,6 +417,25 @@ Transform:
   - {fileID: 648931217}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &753026894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 753026891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68c73075ea7279545ad350d099156159, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 7
+  playerHeight: 2
+  groundDrag: 5
+  ground:
+    serializedVersion: 2
+    m_Bits: 128
+  orientation: {fileID: 1539345242}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -553,13 +573,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8df4259648c19a41a5ca0ff4ab8f5a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _width: 15
-  _height: 15
-  _tilePrefab: {fileID: 6050652358302095841, guid: c699ff7b1a196614fa89f3ed11500792, type: 3}
-  _wallPrefab: {fileID: -591923025811826050, guid: 1cf49b4b5b09848479c79a2bcc593912, type: 3}
-  _floorPrefab: {fileID: 1271099116052042051, guid: c8ecacc1398b54045ad3d9d6f21aa920, type: 3}
-  _player: {fileID: 753026893}
-  _playerRB: {fileID: 753026891}
+  width: 10
+  height: 5
+  tilePrefab: {fileID: 6050652358302095841, guid: c699ff7b1a196614fa89f3ed11500792, type: 3}
+  wallPrefab: {fileID: -591923025811826050, guid: 1cf49b4b5b09848479c79a2bcc593912, type: 3}
+  floorPrefab: {fileID: 1271099116052042051, guid: c8ecacc1398b54045ad3d9d6f21aa920, type: 3}
+  player: {fileID: 753026893}
+  playerRB: {fileID: 753026891}
 --- !u!4 &1006166404
 Transform:
   m_ObjectHideFlags: 0

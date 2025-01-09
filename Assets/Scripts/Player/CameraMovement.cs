@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
-    public Transform cameraPosition;
+    [SerializeField] private Transform cameraPosition;
         
     void Update()
     {

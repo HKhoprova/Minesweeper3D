@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
-    public float sensX;
-    public float sensY;
+    [SerializeField] private float sensX;
+    [SerializeField] private float sensY;
 
-    public Transform orientation;
+    [SerializeField] private Transform orientation;
 
-    float xRotation;
-    float yRotation;
+    private float xRotation;
+    private float yRotation;
 
     private void Start()
     {
