@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 7f;
@@ -13,9 +13,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpCooldown = 0.4f;
     [SerializeField] private float airMultiplier = 0.4f;
     private bool readyToJump = true;
+    private KeyCode jumpKey = KeyCode.Space;
 
-    [Header("Keybinds")]
-    [SerializeField] private KeyCode jumpKey = KeyCode.Space;
+    [Header("Interacting")]
+    [SerializeField] private float interactDistance = 2f;
+    [SerializeField] private Transform marker;
 
     [Header("Ground Check")]
     [SerializeField] private Transform groundCheck;
@@ -47,6 +49,8 @@ public class PlayerMovement : MonoBehaviour
         SpeedControl();
 
         rb.drag = grounded ? groundDrag : 0f;
+
+        HandleInteraction();
     }
 
     private void FixedUpdate()
@@ -101,5 +105,24 @@ public class PlayerMovement : MonoBehaviour
     private void ResetJump()
     {
         readyToJump = true;
+    }
+
+    private void HandleInteraction()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, interactDistance) && hit.collider.CompareTag("Tile"))
+            {
+                Debug.Log("Interacted with: " + hit.collider.name);
+
+                // Optional: Change the tile's material/color to show interaction
+                Renderer tileRenderer = hit.collider.GetComponent<Renderer>();
+                if (tileRenderer != null)
+                {
+                    tileRenderer.material.color = Color.red; // Change to any color to visualize interaction
+                }
+            }
+        }
     }
 }

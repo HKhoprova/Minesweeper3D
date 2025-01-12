@@ -151,7 +151,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 753026893}
@@ -176,7 +176,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6faa5f83acf36d7439f195c5db0db181, type: 2}
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -213,7 +213,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 246834683}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 41e1f01b94952934eb8d9b4653d73c01, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -348,7 +348,7 @@ Transform:
   m_GameObject: {fileID: 705507993}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 5.25, z: 0}
+  m_LocalPosition: {x: 0, y: 4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -435,7 +435,8 @@ MonoBehaviour:
   jumpForce: 10
   jumpCooldown: 0.4
   airMultiplier: 0.4
-  jumpKey: 32
+  interactDistance: 3
+  marker: {fileID: 0}
   groundCheck: {fileID: 1877250108}
   groundDistance: 0.2
   whatIsGround:
@@ -579,12 +580,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8df4259648c19a41a5ca0ff4ab8f5a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 10
-  height: 10
+  rows: 10
+  cols: 10
   tilePrefab: {fileID: 6050652358302095841, guid: c699ff7b1a196614fa89f3ed11500792, type: 3}
   wallPrefab: {fileID: -591923025811826050, guid: 1cf49b4b5b09848479c79a2bcc593912, type: 3}
   floorPrefab: {fileID: 1271099116052042051, guid: c8ecacc1398b54045ad3d9d6f21aa920, type: 3}
-  lightPosition: {fileID: 705507995}
   player: {fileID: 753026893}
   playerRB: {fileID: 753026891}
 --- !u!4 &1006166404
@@ -704,7 +704,7 @@ Transform:
   m_GameObject: {fileID: 1877250107}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalPosition: {x: 0, y: -0.75, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
