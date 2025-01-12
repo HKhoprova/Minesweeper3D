@@ -116,11 +116,11 @@ public class PlayerController : MonoBehaviour
             {
                 Debug.Log("Interacted with: " + hit.collider.name);
 
-                // Optional: Change the tile's material/color to show interaction
+                // Change the tile's color
                 Renderer tileRenderer = hit.collider.GetComponent<Renderer>();
                 if (tileRenderer != null)
                 {
-                    tileRenderer.material.color = Color.red; // Change to any color to visualize interaction
+                    tileRenderer.material.color = Color.red;
                 }
             }
         }

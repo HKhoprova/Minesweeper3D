@@ -435,7 +435,7 @@ MonoBehaviour:
   jumpForce: 10
   jumpCooldown: 0.4
   airMultiplier: 0.4
-  interactDistance: 3
+  interactDistance: 2
   marker: {fileID: 0}
   groundCheck: {fileID: 1877250108}
   groundDistance: 0.2
