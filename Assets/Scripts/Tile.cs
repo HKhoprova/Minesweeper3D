@@ -12,6 +12,7 @@ public class Tile : MonoBehaviour
 
     [SerializeField] private Material defaultMaterial;
     [SerializeField] private Material flaggedMaterial;
+    [SerializeField] private Material incorrectMaterial;
     [SerializeField] private Transform flag; 
     
     private Renderer tileRenderer;
@@ -29,9 +30,7 @@ public class Tile : MonoBehaviour
         if (isRevealed)
             return;
 
-        if (isFlagged) 
-            isFlagged = false;
-        else isFlagged = true;
+        isFlagged = !isFlagged;
 
         UpdateTileVisuals();
     }
@@ -70,6 +69,12 @@ public class Tile : MonoBehaviour
         {
             tileRenderer.material = defaultMaterial;
         }
+    }
+
+    public void MarkAsIncorrect()
+    {
+        if (tileRenderer == null) return;
+        tileRenderer.material = incorrectMaterial;
     }
 
     public bool IsFlagged()

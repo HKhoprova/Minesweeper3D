@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     [Header("Managers")]
     [SerializeField] private GridManager gridManager;
     [SerializeField] private MineManager mineManager;
-    //[SerializeField] private UIManager uiManager;       // Future script
+    [SerializeField] private UIManager uiManager;
 
     [Header("Grid Settings")]
     public int rows = 10;
@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     private Floor[,] floorGrid;
 
     private int revealCount = 0;
+    private int notFlaggedCount = 0;
     private int totalSafeTiles;
 
     private void Awake()
@@ -40,6 +41,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         InitializeGame();
+        Debug.Log("start level!");
     }
 
     public void InitializeGame()
@@ -48,6 +50,7 @@ public class GameManager : MonoBehaviour
 
         revealCount = 0;
         totalSafeTiles = rows * cols - mineCount;
+        notFlaggedCount = mineCount;
         tileGrid = new Tile[rows, cols];
         floorGrid = new Floor[rows, cols];
 
@@ -62,19 +65,19 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Grid Manager reference is missing!");
         }
 
-        //if (uiManager != null)
-        //{
-        //    //reset ui (timer, mine count)
-        //}
-        //else
-        //{
-        //    Debug.LogError("UI Manager reference is missing!");
-        //}
+        if (uiManager != null)
+        {
+            uiManager.UpdateMineCounter(notFlaggedCount);
+        }
+        else
+        {
+            Debug.LogError("UI Manager reference is missing!");
+        }
     }
 
     public void OnTileClicked(GameObject tileObject)
     {
-        if (currentGameState == GameState.Won || currentGameState == GameState.Lost)
+        if (currentGameState == GameState.Won || currentGameState == GameState.Lost || uiManager.IsGamePaused())
             return;
 
         Tile tile = tileObject.GetComponent<Tile>();
@@ -137,18 +140,28 @@ public class GameManager : MonoBehaviour
 
     public void OnTileFlagged(GameObject tileObject)
     {
-        if (currentGameState == GameState.Won || currentGameState == GameState.Lost)
+        if (currentGameState == GameState.Won || currentGameState == GameState.Lost || uiManager.IsGamePaused())
             return;
 
         Tile tile = tileObject.GetComponent<Tile>();
         if (tile != null)
         {
             tile.ToggleFlag();
+            if (!tile.IsFlagged())
+            {
+                notFlaggedCount++;
+            }
+            else
+            {
+                notFlaggedCount--;
+            }
         }
-        //if (uiManager != null)
-        //{
-        //    uiManager.UpdateMinesLeft(tile.IsFlagged()); // +1 if tile flagged and -1 if not flagged
-        //}
+
+        if (uiManager != null)
+        {
+            if (tile.IsFlagged())
+                uiManager.UpdateMineCounter(notFlaggedCount);
+        }
     }
 
     private void RevealEmptyAround(Tile tile, int row, int col)
@@ -194,10 +207,31 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("You win!");
 
-        //if (uiManager != null)
-        //{
-        //    uiManager.ShowWinPanel();
-        //}
+        if (uiManager != null)
+        {
+            uiManager.ShowWinScreen();
+        }
+
+        FlagAllMines();
+    }
+
+    private void FlagAllMines()
+    {
+        for (int row = 0; row < rows; row++)
+        {
+            for (int col = 0; col < cols; col++)
+            {
+                Tile tile = tileGrid[row, col];
+
+                if (tile == null)
+                    continue;
+
+                if (mineManager.IsMine(row, col) && !tile.IsFlagged())
+                {
+                    tile.ToggleFlag();
+                }
+            }
+        }
     }
 
     private void OnGameLost()
@@ -206,9 +240,34 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("You lose!");
 
-        //if (uiManager != null)
-        //{
-        //    uiManager.ShowGameOverPanel();
-        //}
+        if (uiManager != null)
+        {
+            uiManager.ShowLoseScreen();
+        }
+
+        RevealAllTiles();
+    }
+
+    public void RevealAllTiles()
+    {
+        for (int row = 0; row < rows; row++)
+        {
+            for (int col = 0; col < cols; col++)
+            {
+                Tile tile = tileGrid[row, col];
+
+                if (tile == null)
+                    continue;
+
+                if (!tile.IsRevealed() && !tile.IsFlagged())
+                {
+                    tile.TryRevealTile();
+                }
+                else if (tile.IsFlagged() && !mineManager.IsMine(row, col))
+                {
+                    tile.MarkAsIncorrect();
+                }
+            }
+        }
     }
 }
