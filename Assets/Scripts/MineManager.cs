@@ -73,7 +73,7 @@ public class MineManager : MonoBehaviour
         }
     }
 
-    private bool IsInBounds(int row, int col, int rows, int cols)
+    public bool IsInBounds(int row, int col, int rows, int cols)
     {
         return row >= 0 && row < rows && col >= 0 && col < cols;
     }
@@ -81,6 +81,11 @@ public class MineManager : MonoBehaviour
     public bool IsMine(int row, int col)
     {
         return grid[row, col] == -1;
+    }
+
+    public bool IsEmpty(int row, int col)
+    {
+        return grid[row, col] == 0;
     }
 
     public int GetCellValue(int row, int col)

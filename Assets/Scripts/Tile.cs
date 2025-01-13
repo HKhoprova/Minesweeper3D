@@ -6,37 +6,48 @@ using UnityEngine;
 public class Tile : MonoBehaviour
 {
     public enum TileState { NotFlagged, Flagged }
-    private TileState currentState = TileState.NotFlagged;
     private int row, col;
+    private bool isFlagged = false;
+    private bool isRevealed = false;
 
     [SerializeField] private Material defaultMaterial;
     [SerializeField] private Material flaggedMaterial;
-    [SerializeField] private Transform flag;
-
+    [SerializeField] private Transform flag; 
+    
     private Renderer tileRenderer;
+    private Collider tileCollider;
 
     private void Start()
     {
         tileRenderer = GetComponent<Renderer>();
+        tileCollider = GetComponent<Collider>();
         UpdateTileVisuals();
     }
 
     public void ToggleFlag()
     {
-        currentState = currentState == TileState.Flagged ? TileState.NotFlagged : TileState.Flagged;
+        if (isRevealed)
+            return;
+
+        if (isFlagged) 
+            isFlagged = false;
+        else isFlagged = true;
+
         UpdateTileVisuals();
     }
 
-    public bool TryDestroyTile()
+    public bool TryRevealTile()
     {
-        if (currentState == TileState.Flagged)
+        if (isFlagged)
         {
-            Debug.Log("Cannot destroy flagged tile.");
+            Debug.Log("Cannot reveal flagged tile.");
             return false;
         }
 
-        Debug.Log("Tile destroyed: " + name);
-        Destroy(gameObject);
+        isRevealed = true;
+        tileRenderer.enabled = false;
+        tileCollider.enabled = false;
+        Debug.Log("Tile revealed: " + name);
         return true;
     }
 
@@ -44,7 +55,7 @@ public class Tile : MonoBehaviour
     {
         if (tileRenderer == null) return;
 
-        if (currentState == TileState.Flagged)
+        if (isFlagged)
         {
             if (flaggedMaterial != null)
             {
@@ -63,7 +74,12 @@ public class Tile : MonoBehaviour
 
     public bool IsFlagged()
     {
-        return currentState == TileState.Flagged;
+        return isFlagged;
+    }
+
+    public bool IsRevealed()
+    {
+        return isRevealed;
     }
 
     public void SetCoords(int row,  int col)

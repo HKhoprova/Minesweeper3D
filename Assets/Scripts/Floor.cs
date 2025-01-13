@@ -48,11 +48,11 @@ public class Floor : MonoBehaviour
     {
         switch (value)
         {
-            case 1: return Color.blue; // 1 is blue
-            case 2: return Color.green; // 2 is green
-            case 3: return Color.red; // 3 is red
-            case 4: return new Color(0.2f, 0.2f, 1f); // 4 is dark blue
-            case 5: return new Color(0.5f, 0f, 0f); // 5 is dark red
+            case 1: return new Color(0f, 0f, 0.976f); // 1 is blue
+            case 2: return new Color(0.02f, 0.486f, 0f); // 2 is green
+            case 3: return new Color(0.796f, 0.027f, 0.027f); // 3 is red
+            case 4: return new Color(0.067f, 0.035f, 0.478f); // 4 is dark blue
+            case 5: return new Color(0.427f, 0.039f, 0.063f); // 5 is brown
             case 6: return Color.cyan; // 6 is cyan
             case 7: return Color.black; // 7 is black
             case 8: return Color.gray; // 8 is gray

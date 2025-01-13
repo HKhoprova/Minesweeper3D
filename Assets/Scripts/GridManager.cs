@@ -16,10 +16,12 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Transform player;
     [SerializeField] private GameObject playerRB;
 
+    private Tile[,] tileGrid;
     private Floor[,] floorGrid;
 
-    public Floor[,] GenerateGrid()
+    public void GenerateGrid()
     {
+        tileGrid = new Tile[rows, cols];
         floorGrid = new Floor[rows, cols];
 
         var spawnedWall1 = Instantiate(wallPrefab, new Vector3((rows + 1f) * 0.5f, 0.4f, cols + 1f), Quaternion.identity);
@@ -45,6 +47,7 @@ public class GridManager : MonoBehaviour
                 var spawnedTile = Instantiate(tilePrefab, new Vector3(x, 0, z), Quaternion.identity);
                 spawnedTile.name = $"Tile {x - 1} {z - 1}";
                 spawnedTile.SetCoords(x - 1, z - 1);
+                tileGrid[x - 1, z - 1] = spawnedTile;
 
                 var spawnedFloorPart = Instantiate(floorPrefab, new Vector3(x, -0.52f, z), Quaternion.identity);
                 spawnedFloorPart.name = $"Floor part {x - 1} {z - 1}";
@@ -59,7 +62,15 @@ public class GridManager : MonoBehaviour
         playerRB.SetActive(false);
         player.position = new Vector3((float)rows * 0.5f - 0.5f, 2f, (float)cols * 0.5f - 0.5f);
         playerRB.SetActive(true);
+    }
 
+    public Tile[,] GetTileGrid()
+    {
+        return tileGrid;
+    }
+
+    public Floor[,] GetFloorGrid()
+    {
         return floorGrid;
     }
 }
