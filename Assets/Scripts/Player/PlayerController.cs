@@ -17,7 +17,6 @@ public class PlayerController : MonoBehaviour
 
     [Header("Interacting")]
     [SerializeField] private float interactDistance = 2f;
-    [SerializeField] private Transform marker;
 
     [Header("Ground Check")]
     [SerializeField] private Transform groundCheck;
@@ -116,11 +115,24 @@ public class PlayerController : MonoBehaviour
             {
                 Debug.Log("Interacted with: " + hit.collider.name);
 
-                // Change the tile's color
-                Renderer tileRenderer = hit.collider.GetComponent<Renderer>();
-                if (tileRenderer != null)
+                GameObject tileObject = hit.collider.gameObject;
+                if (tileObject != null)
                 {
-                    tileRenderer.material.color = Color.red;
+                    GameManager.Instance.OnTileFlagged(tileObject);
+                }
+            }
+        }
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, interactDistance) && hit.collider.CompareTag("Tile"))
+            {
+                Debug.Log("Interacted with: " + hit.collider.name);
+
+                GameObject tileObject = hit.collider.gameObject;
+                if (tileObject != null)
+                {
+                    GameManager.Instance.OnTileClicked(tileObject);
                 }
             }
         }

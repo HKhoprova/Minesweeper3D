@@ -118,3 +118,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b68c2e716f1b1b4bae8fa649038763a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultMaterial: {fileID: 2100000, guid: f9fa42ed1dee6364bbf277288008633b, type: 2}
+  flaggedMaterial: {fileID: 2100000, guid: de5e8f18d8b433841940a25b9e597d9e, type: 2}
+  flag: {fileID: 0}
