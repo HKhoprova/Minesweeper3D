@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,7 @@ public class Tile : MonoBehaviour
 {
     public enum TileState { NotFlagged, Flagged }
     private TileState currentState = TileState.NotFlagged;
+    private int row, col;
 
     [SerializeField] private Material defaultMaterial;
     [SerializeField] private Material flaggedMaterial;
@@ -62,5 +64,16 @@ public class Tile : MonoBehaviour
     public bool IsFlagged()
     {
         return currentState == TileState.Flagged;
+    }
+
+    public void SetCoords(int row,  int col)
+    {
+        this.row = row;
+        this.col = col;
+    }
+
+    public Tuple<int, int> GetCoords()
+    {
+        return Tuple.Create(row, col);
     }
 }

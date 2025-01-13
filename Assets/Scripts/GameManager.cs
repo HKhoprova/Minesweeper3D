@@ -13,13 +13,14 @@ public class GameManager : MonoBehaviour
 
     [Header("Managers")]
     [SerializeField] private GridManager gridManager;
-    //[SerializeField] private MineManager mineManager;   // Future script
+    [SerializeField] private MineManager mineManager;
     //[SerializeField] private UIManager uiManager;       // Future script
 
     [Header("Grid Settings")]
     public int rows = 10;
     public int cols = 10;
     public int mineCount = 10;
+    private Floor[,] floorGrid;
 
     private int revealCount = 0;
     private int totalSafeTiles;
@@ -46,10 +47,11 @@ public class GameManager : MonoBehaviour
 
         revealCount = 0;
         totalSafeTiles = rows * cols - mineCount;
+        floorGrid = new Floor[rows, cols];
 
         if (gridManager != null)
         {
-            gridManager.GenerateGrid();
+            floorGrid = gridManager.GenerateGrid();
         }
         else
         {
@@ -71,25 +73,25 @@ public class GameManager : MonoBehaviour
         if (currentGameState == GameState.Won || currentGameState == GameState.Lost)
             return;
 
+        Tile tile = tileObject.GetComponent<Tile>();
+        Tuple<int, int> tileCoords = tile.GetCoords();
+
         // Check if the game started; if not, generates mines
         if (currentGameState == GameState.NotStarted)
         {
             currentGameState = GameState.Playing;
-            
-            Tuple<int, int> tileCoords = ParseTileName(tileObject.name);
 
-            //if (mineManager != null && tileCoords != null)
-            //{
-            //    mineManager.GenerateMines(rows, cols, mineCount, tileCoords);
-            //}
-            //else
-            //{
-            //    Debug.LogError("Mine Manager reference is missing!");
-            //}
+            if (mineManager != null && tileCoords != null)
+            {
+                mineManager.GenerateMinesAndAssignValues(rows, cols, mineCount, tileCoords, floorGrid);
+            }
+            else
+            {
+                Debug.LogError("Mine Manager reference is missing!");
+            }
         }
 
-        Tile tile = tileObject.GetComponent<Tile>();
-        if (tile != null)
+            if (tile != null)
         {
             if (tile.TryDestroyTile())
             {
@@ -102,10 +104,10 @@ public class GameManager : MonoBehaviour
         }
 
         bool isMine = false;
-        //if (mineManager != null && tileObject != null)
-        //{
-        //    isMine = mineManager.IsMine(tileCoords.Item1, tileCoords.Item2);
-        //}
+        if (mineManager != null && tileObject != null)
+        {
+            isMine = mineManager.IsMine(tileCoords.Item1, tileCoords.Item2);
+        }
         
         if (isMine)
         {
@@ -155,20 +157,5 @@ public class GameManager : MonoBehaviour
         //{
         //    uiManager.ShowGameOverPanel();
         //}
-    }
-
-    private Tuple<int, int> ParseTileName(string tileName)
-    {
-        // Expected format: "Tile X Y"
-        string[] parts = tileName.Split(' ');
-        if (parts.Length < 3) return null;
-
-        // parts[0] = "Tile", parts[1] = "X", parts[2] = "Y"
-        int x, y;
-        if (int.TryParse(parts[1], out x) && int.TryParse(parts[2], out y))
-        {
-            return Tuple.Create(x, y);
-        }
-        return null;
     }
 }

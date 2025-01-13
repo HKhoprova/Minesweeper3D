@@ -538,7 +538,6 @@ MonoBehaviour:
   jumpCooldown: 0.4
   airMultiplier: 0.4
   interactDistance: 2
-  marker: {fileID: 0}
   groundCheck: {fileID: 1877250108}
   groundDistance: 0.2
   whatIsGround:
@@ -664,6 +663,7 @@ GameObject:
   - component: {fileID: 976173378}
   - component: {fileID: 976173377}
   - component: {fileID: 976173379}
+  - component: {fileID: 976173380}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -684,6 +684,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridManager: {fileID: 976173379}
+  mineManager: {fileID: 976173380}
   rows: 10
   cols: 10
   mineCount: 10
@@ -721,6 +722,18 @@ MonoBehaviour:
   floorPrefab: {fileID: 1271099116052042051, guid: c8ecacc1398b54045ad3d9d6f21aa920, type: 3}
   player: {fileID: 753026893}
   playerRB: {fileID: 753026891}
+--- !u!114 &976173380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 976173376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22b6e8ce9ca82a148818f4136bf4c63e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1120546276
 GameObject:
   m_ObjectHideFlags: 0
