@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.994, y: 0.05, z: 0.994}
+  m_LocalScale: {x: 0.994, y: 0.994, z: 0.994}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f9fa42ed1dee6364bbf277288008633b, type: 2}
+  - {fileID: 2100000, guid: a497daf3761c44041b7957eec9e76db9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -118,7 +118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b68c2e716f1b1b4bae8fa649038763a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultMaterial: {fileID: 2100000, guid: f9fa42ed1dee6364bbf277288008633b, type: 2}
-  flaggedMaterial: {fileID: 2100000, guid: de5e8f18d8b433841940a25b9e597d9e, type: 2}
-  incorrectMaterial: {fileID: 2100000, guid: f09b9af5901069c4d91c59d68e16a495, type: 2}
-  flag: {fileID: 0}
+  defaultMaterial: {fileID: 2100000, guid: a497daf3761c44041b7957eec9e76db9, type: 2}
+  flaggedMaterial: {fileID: 2100000, guid: 69fc0feb6e2b90142b5adeb788924b62, type: 2}
+  incorrectMaterial: {fileID: 2100000, guid: 8858113ea609d004eb526686e296a4c8, type: 2}
+  flagPrefab: {fileID: 7506454395145381626, guid: 319243c26c222894d97f67fb3dbbaff7, type: 3}

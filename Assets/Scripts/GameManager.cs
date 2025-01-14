@@ -143,6 +143,12 @@ public class GameManager : MonoBehaviour
         if (currentGameState == GameState.Won || currentGameState == GameState.Lost || uiManager.IsGamePaused())
             return;
 
+        if (currentGameState == GameState.NotStarted)
+        {
+            OnTileClicked(tileObject);
+            return;
+        }
+
         Tile tile = tileObject.GetComponent<Tile>();
         if (tile != null)
         {

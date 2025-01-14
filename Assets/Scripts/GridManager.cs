@@ -44,7 +44,7 @@ public class GridManager : MonoBehaviour
         {
             for (int z = 1; z < cols + 1; z++)
             {
-                var spawnedTile = Instantiate(tilePrefab, new Vector3(x, 0, z), Quaternion.identity);
+                var spawnedTile = Instantiate(tilePrefab, new Vector3(x, -0.5f, z), Quaternion.identity);
                 spawnedTile.name = $"Tile {x - 1} {z - 1}";
                 spawnedTile.SetCoords(x - 1, z - 1);
                 tileGrid[x - 1, z - 1] = spawnedTile;

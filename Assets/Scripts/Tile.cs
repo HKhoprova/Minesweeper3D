@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    public enum TileState { NotFlagged, Flagged }
     private int row, col;
     private bool isFlagged = false;
     private bool isRevealed = false;
@@ -13,8 +12,9 @@ public class Tile : MonoBehaviour
     [SerializeField] private Material defaultMaterial;
     [SerializeField] private Material flaggedMaterial;
     [SerializeField] private Material incorrectMaterial;
-    [SerializeField] private Transform flag; 
-    
+    [SerializeField] private Transform flagPrefab;
+
+    private Transform flagInstance;
     private Renderer tileRenderer;
     private Collider tileCollider;
 
@@ -31,6 +31,15 @@ public class Tile : MonoBehaviour
             return;
 
         isFlagged = !isFlagged;
+
+        if (isFlagged)
+        {
+            PlaceFlag();
+        }
+        else
+        {
+            RemoveFlag();
+        }
 
         UpdateTileVisuals();
     }
@@ -60,15 +69,40 @@ public class Tile : MonoBehaviour
             {
                 tileRenderer.material = flaggedMaterial;
             }
-            if (flag != null)
-            {
-                //place flag on tile
-            }
         }
         else if (defaultMaterial != null)
         {
             tileRenderer.material = defaultMaterial;
         }
+    }
+
+    private void PlaceFlag()
+    {
+        if (flagPrefab == null || flagInstance != null)
+            return;
+
+        flagInstance = Instantiate(flagPrefab, transform.position + Vector3.up * 1f, Quaternion.identity, transform);
+
+        Flag flag = flagInstance.GetComponent<Flag>();
+        if (flag != null)
+        {
+            flag.ShowFlag();
+        }
+    }
+
+    private void RemoveFlag()
+    {
+        if (flagInstance == null)
+            return;
+        
+        Flag flag = flagInstance.GetComponent<Flag>();
+        if (flag != null)
+        {
+            flag.HideFlag();
+        }
+
+        Destroy(flagInstance.gameObject, 0.5f);
+        flagInstance = null;
     }
 
     public void MarkAsIncorrect()
