@@ -28,13 +28,9 @@ public class Floor : MonoBehaviour
         }
 
         // Update the displayed text based on the value
-        if (cellValue == -1)
+        if (cellValue == -1 || cellValue == 0)
         {
-            textMeshPro.text = "*"; // Mine
-        }
-        else if (cellValue == 0)
-        {
-            textMeshPro.text = ""; // Empty
+            textMeshPro.text = ""; // Mine or empty value
         }
         else
         {

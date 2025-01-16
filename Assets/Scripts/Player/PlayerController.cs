@@ -113,8 +113,6 @@ public class PlayerController : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, interactDistance) && hit.collider.CompareTag("Tile"))
             {
-                Debug.Log("Interacted with: " + hit.collider.name);
-
                 GameObject tileObject = hit.collider.gameObject;
                 if (tileObject != null)
                 {
@@ -127,8 +125,6 @@ public class PlayerController : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, interactDistance) && hit.collider.CompareTag("Tile"))
             {
-                Debug.Log("Interacted with: " + hit.collider.name);
-
                 GameObject tileObject = hit.collider.gameObject;
                 if (tileObject != null)
                 {

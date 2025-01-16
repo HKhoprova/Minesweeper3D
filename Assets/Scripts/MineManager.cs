@@ -11,6 +11,21 @@ public class MineManager : MonoBehaviour
     {
         grid = new int[rows, cols];
 
+        if (rows < 10)
+        {
+            rows = 10;
+        }
+
+        if (cols < 10)
+        {
+            cols = 10;
+        }
+
+        if (mineCount >= rows * cols * 0.5f)
+        {
+            mineCount = rows * cols % 10;
+        }
+
         PlaceMines(grid, rows, cols, mineCount, safeTileCoords);
         CalculateNumbers(grid, rows, cols, floorGrid);
     }

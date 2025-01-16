@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    public enum GameState { NotStarted, Playing, Won, Lost }
+    private enum GameState { NotStarted, Playing, Won, Lost }
     private GameState currentGameState = GameState.NotStarted;
 
     [Header("Managers")]
@@ -17,14 +18,18 @@ public class GameManager : MonoBehaviour
     [SerializeField] private UIManager uiManager;
 
     [Header("Grid Settings")]
-    public int rows = 10;
-    public int cols = 10;
-    public int mineCount = 10;
-    private Tile[,] tileGrid;
+    [SerializeField] private int rows = 10;
+    [SerializeField] private int cols = 10;
+    [SerializeField] private int mineCount = 10;
+    private TileHolder[,] tileGrid;
     private Floor[,] floorGrid;
 
+    [Header("Prefabs")]
+    [SerializeField] private Mine minePrefab;
+    [SerializeField] private SootStain sootPrefab;
+
     private int revealCount = 0;
-    private int notFlaggedCount = 0;
+    private int notFlaggedMinesCount = 0;
     private int totalSafeTiles;
 
     private void Awake()
@@ -41,7 +46,6 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         InitializeGame();
-        Debug.Log("start level!");
     }
 
     public void InitializeGame()
@@ -50,8 +54,8 @@ public class GameManager : MonoBehaviour
 
         revealCount = 0;
         totalSafeTiles = rows * cols - mineCount;
-        notFlaggedCount = mineCount;
-        tileGrid = new Tile[rows, cols];
+        notFlaggedMinesCount = mineCount;
+        tileGrid = new TileHolder[rows, cols];
         floorGrid = new Floor[rows, cols];
 
         if (gridManager != null)
@@ -67,7 +71,7 @@ public class GameManager : MonoBehaviour
 
         if (uiManager != null)
         {
-            uiManager.UpdateMineCounter(notFlaggedCount);
+            uiManager.UpdateMineCounter(notFlaggedMinesCount);
         }
         else
         {
@@ -75,12 +79,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void OnTileClicked(GameObject tileObject)
+    public void OnTileClicked(GameObject tileHolderObject)
     {
         if (currentGameState == GameState.Won || currentGameState == GameState.Lost || uiManager.IsGamePaused())
             return;
 
-        Tile tile = tileObject.GetComponent<Tile>();
+        TileHolder tile = tileHolderObject.GetComponent<TileHolder>();
         Tuple<int, int> tileCoords = tile.GetCoords();
 
         // Check if the game started; if not, generates mines
@@ -101,7 +105,7 @@ public class GameManager : MonoBehaviour
         if (tile != null)
         {
             bool isEmpty = false;
-            if (mineManager != null && tileObject != null)
+            if (mineManager != null && tileHolderObject != null)
             {
                 isEmpty = mineManager.IsEmpty(tileCoords.Item1, tileCoords.Item2);
             }
@@ -110,7 +114,7 @@ public class GameManager : MonoBehaviour
             {
                 RevealEmptyAround(tile, tileCoords.Item1, tileCoords.Item2);
             }
-            else if (tile.TryRevealTile())
+            else if (tile.TryRevealTile(currentGameState == GameState.Lost))
             {
                 revealCount++;
             }
@@ -121,13 +125,18 @@ public class GameManager : MonoBehaviour
         }
 
         bool isMine = false;
-        if (mineManager != null && tileObject != null)
+        if (mineManager != null && tileHolderObject != null)
         {
             isMine = mineManager.IsMine(tileCoords.Item1, tileCoords.Item2);
         }
         
         if (isMine)
         {
+            int row = tileCoords.Item1;
+            int col = tileCoords.Item2;
+            var sootStain = Instantiate(sootPrefab, new Vector3(row, 0.001f, col), Quaternion.identity);
+            sootStain.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+            sootStain.name = $"Soot stain";
             OnGameLost();
             return;
         }
@@ -138,39 +147,38 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void OnTileFlagged(GameObject tileObject)
+    public void OnTileFlagged(GameObject tileHolderObject)
     {
         if (currentGameState == GameState.Won || currentGameState == GameState.Lost || uiManager.IsGamePaused())
             return;
 
         if (currentGameState == GameState.NotStarted)
         {
-            OnTileClicked(tileObject);
+            OnTileClicked(tileHolderObject);
             return;
         }
 
-        Tile tile = tileObject.GetComponent<Tile>();
+        TileHolder tile = tileHolderObject.GetComponent<TileHolder>();
         if (tile != null)
         {
             tile.ToggleFlag();
             if (!tile.IsFlagged())
             {
-                notFlaggedCount++;
+                notFlaggedMinesCount++;
             }
             else
             {
-                notFlaggedCount--;
+                notFlaggedMinesCount--;
             }
-        }
 
-        if (uiManager != null)
-        {
-            if (tile.IsFlagged())
-                uiManager.UpdateMineCounter(notFlaggedCount);
+            if (uiManager != null)
+            {
+                uiManager.UpdateMineCounter(notFlaggedMinesCount);
+            }
         }
     }
 
-    private void RevealEmptyAround(Tile tile, int row, int col)
+    private void RevealEmptyAround(TileHolder tile, int row, int col)
     {
         if (tile == null)
             return;
@@ -178,7 +186,7 @@ public class GameManager : MonoBehaviour
         if (tile.IsRevealed() || tile.IsFlagged())
             return;
 
-        if (tile.TryRevealTile())
+        if (tile.TryRevealTile(currentGameState == GameState.Lost))
         {
             revealCount++;
             for (int i = row - 1; i <= row + 1; i++)
@@ -188,7 +196,7 @@ public class GameManager : MonoBehaviour
                     if (!mineManager.IsInBounds(i, j, rows, cols))
                         continue;
 
-                    Tile checkTile = tileGrid[i, j];
+                    TileHolder checkTile = tileGrid[i, j];
 
                     if (checkTile.IsRevealed() || checkTile.IsFlagged())
                         continue;
@@ -199,7 +207,7 @@ public class GameManager : MonoBehaviour
                     }
                     else
                     {
-                        checkTile.TryRevealTile();
+                        checkTile.TryRevealTile(currentGameState == GameState.Lost);
                         revealCount++;
                     }
                 }
@@ -210,8 +218,6 @@ public class GameManager : MonoBehaviour
     private void OnGameWon()
     {
         currentGameState = GameState.Won;
-
-        Debug.Log("You win!");
 
         if (uiManager != null)
         {
@@ -227,7 +233,7 @@ public class GameManager : MonoBehaviour
         {
             for (int col = 0; col < cols; col++)
             {
-                Tile tile = tileGrid[row, col];
+                TileHolder tile = tileGrid[row, col];
 
                 if (tile == null)
                     continue;
@@ -244,8 +250,6 @@ public class GameManager : MonoBehaviour
     {
         currentGameState = GameState.Lost;
 
-        Debug.Log("You lose!");
-
         if (uiManager != null)
         {
             uiManager.ShowLoseScreen();
@@ -260,20 +264,27 @@ public class GameManager : MonoBehaviour
         {
             for (int col = 0; col < cols; col++)
             {
-                Tile tile = tileGrid[row, col];
+                TileHolder tile = tileGrid[row, col];
 
                 if (tile == null)
                     continue;
 
                 if (!tile.IsRevealed() && !tile.IsFlagged())
                 {
-                    tile.TryRevealTile();
+                    tile.TryRevealTile(currentGameState == GameState.Lost);
+                    if (mineManager.IsMine(row, col))
+                    {
+                        var spawnedMine = Instantiate(minePrefab, new Vector3(row, 0.001f, col), Quaternion.identity);
+                        spawnedMine.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+                        spawnedMine.name = $"Mine at {row} {col}";
+                    }
                 }
                 else if (tile.IsFlagged() && !mineManager.IsMine(row, col))
                 {
                     tile.MarkAsIncorrect();
                 }
             }
+
         }
     }
 }
