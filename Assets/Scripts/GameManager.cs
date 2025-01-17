@@ -256,6 +256,19 @@ public class GameManager : MonoBehaviour
         FlagAllMines();
 
         LevelManager.Instance.LevelWon();
+
+        if (isCustomShape)
+        {
+            if (LevelManager.Instance.selectedLevelIndex + 1 < LevelManager.Instance.shapedLevels.Count)
+                uiManager.ActivateNextLevelButton();
+        }
+        else
+        {
+            if (LevelManager.Instance.selectedLevelIndex + 1 < LevelManager.Instance.squareLevels.Count)
+                uiManager.ActivateNextLevelButton();
+        }
+
+        uiManager.UpdateMineCounter(0);
     }
 
     private void FlagAllMines()
@@ -315,6 +328,19 @@ public class GameManager : MonoBehaviour
                     tile.MarkAsIncorrect();
                 }
             }
+        }
+    }
+
+    public void LoadNextLevel()
+    {
+        LevelManager.Instance.selectedLevelIndex++;
+        if (isCustomShape)
+        {
+            LevelManager.Instance.SelectedLevel = LevelManager.Instance.shapedLevels[LevelManager.Instance.selectedLevelIndex];
+        }
+        else
+        {
+            LevelManager.Instance.SelectedLevel = LevelManager.Instance.squareLevels[LevelManager.Instance.selectedLevelIndex];
         }
     }
 

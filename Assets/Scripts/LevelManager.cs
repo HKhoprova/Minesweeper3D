@@ -16,7 +16,7 @@ public class LevelManager : MonoBehaviour
     public List<Level> squareLevels;
     public List<Level> shapedLevels;
 
-    public Level SelectedLevel { get; private set; }
+    public Level SelectedLevel { get; set; }
     public int selectedLevelIndex = 0;
 
 
@@ -141,10 +141,11 @@ public class LevelManager : MonoBehaviour
 
         shapedLevels = new List<Level>
         {
-            new Level("Shape 1", 15, 15, 15, true, "shape1", true),
-            new Level("Shape 2", 15, 15, 25, true, "shape2", true),
-            new Level("Circle", 15, 15, 35, true, "shape3", true),
-            new Level("Shape 4", 15, 15, 45, true, "shape4", true)
+            new Level("Flower", 17, 17, 35, true, "shape1", true),
+            new Level("Heart", 17, 15, 30, true, "shape2", false),
+            new Level("Circle", 15, 15, 35, true, "shape3", false),
+            new Level("Clock", 21, 21, 70, true, "shape4", false),
+            new Level("Five", 18, 27, 105, true, "shape5", false)
         };
     }
 

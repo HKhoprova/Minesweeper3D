@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 using static UnityEngine.Rendering.DebugUI.Table;
+using UnityEngine.UI;
 
 
 public class UIManager : MonoBehaviour
@@ -15,23 +16,36 @@ public class UIManager : MonoBehaviour
 
     [Header("UI Elements")]
     [SerializeField] private TMP_Text mineCounterText;
+    [SerializeField] private CanvasGroup levelNamePanel;
+    [SerializeField] private TextMeshProUGUI levelNameText;
+    [SerializeField] private float fadeDuration = 1.0f;
+    [SerializeField] private float displayTime = 2.0f;
 
     [Header("Timer")]
     [SerializeField] private Timer timer;
 
-    [Header("PauseCustomizing")]
+    [Header("Pause")]
     [SerializeField] private GameObject pauseBgSquared;
     [SerializeField] private GameObject pauseBgShaped;
+    [SerializeField] private GameObject nextLevelButton;
 
     private bool isGamePaused = false;
 
     private void Start()
     {
+        nextLevelButton.gameObject.SetActive(false);
         pausePanel.SetActive(false);
         winPanel.SetActive(false);
         losePanel.SetActive(false);
         timer.enabled = false;
         Time.timeScale = 1f;
+
+        if (levelNameText != null)
+        {
+            if (LevelManager.Instance != null)
+                levelNameText.text = "Level: " + LevelManager.Instance.SelectedLevel.Name;
+            StartCoroutine(ShowAndFadeLevelName());
+        }
     }
 
     private void Update()
@@ -77,6 +91,24 @@ public class UIManager : MonoBehaviour
         mineCounterText.text = $"{remainingMines}";
     }
 
+    private IEnumerator ShowAndFadeLevelName()
+    {
+        levelNamePanel.alpha = 1f;
+
+        yield return new WaitForSeconds(displayTime);
+
+        float elapsedTime = 0.0f;
+
+        while (elapsedTime < fadeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            levelNamePanel.alpha = Mathf.Lerp(1.0f, 0.0f, elapsedTime / fadeDuration);
+            yield return null;
+        }
+
+        levelNamePanel.alpha = 0.0f;
+    }
+
     public void ShowWinScreen()
     {
         winPanel.SetActive(true);
@@ -116,6 +148,12 @@ public class UIManager : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
+    public void ContinueToNextLevel()
+    {
+        GameManager.Instance.LoadNextLevel();
+        RestartGame();
+    }
+
     public void ActivateTimer()
     {
         timer.enabled = true;
@@ -124,5 +162,10 @@ public class UIManager : MonoBehaviour
     public bool IsGamePaused()
     {
         return isGamePaused;
+    }
+
+    public void ActivateNextLevelButton()
+    {
+        nextLevelButton.gameObject.SetActive(true);
     }
 }

@@ -167,8 +167,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultMaterial: {fileID: 2100000, guid: 21678b4dff374d3448573939a71ebac3, type: 2}
-  flaggedMaterial: {fileID: 2100000, guid: ae17a78d29c1f7841a5ef63eeed670cd, type: 2}
-  incorrectMaterial: {fileID: 2100000, guid: 73882f87dee7a0f40a00d99527bb6763, type: 2}
+  flaggedMaterial: {fileID: 2100000, guid: fcf5eda0f242e1f448f8fa00b754e0d1, type: 2}
+  incorrectMaterial: {fileID: 2100000, guid: b3f47845d4ae2024b9f60d572c1b5dcd, type: 2}
 --- !u!95 &2458360455281526651
 Animator:
   serializedVersion: 5
