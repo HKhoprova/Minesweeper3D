@@ -1,0 +1,42 @@
+{
+    "squareLevels": [
+        {
+            "Name": "Easy 1",
+            "Rows": 10,
+            "Cols": 10,
+            "Mines": 10,
+            "IsCustomShape": false,
+            "ShapeFile": "",
+            "IsUnlocked": true
+        },
+        {
+            "Name": "Easy 2",
+            "Rows": 10,
+            "Cols": 15,
+            "Mines": 15,
+            "IsCustomShape": false,
+            "ShapeFile": "",
+            "IsUnlocked": true
+        }
+    ],
+    "shapedLevels": [
+        {
+            "Name": "Shape 1",
+            "Rows": 10,
+            "Cols": 10,
+            "Mines": 15,
+            "IsCustomShape": true,
+            "ShapeFile": "path/to/shape1",
+            "IsUnlocked": true
+        },
+        {
+            "Name": "Shape 2",
+            "Rows": 15,
+            "Cols": 15,
+            "Mines": 30,
+            "IsCustomShape": true,
+            "ShapeFile": "path/to/shape2",
+            "IsUnlocked": false
+        }
+    ]
+}

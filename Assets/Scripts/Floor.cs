@@ -5,12 +5,21 @@ using TMPro;
 
 public class Floor : MonoBehaviour
 {
+    [SerializeField] private Material defaultMaterial;
+    [SerializeField] private Material borderShapedMaterial;
+    [SerializeField] private Material borderSquareMaterial;
+    private Renderer floorRenderer;
+
     [SerializeField] private TMP_Text textMeshPro;
     private int cellValue = 0;
+    private bool isBorder = false;
+    private bool shapedLevel = false;
 
     private void Start()
     {
+        floorRenderer = GetComponent<Renderer>();
         UpdateText();
+        UpdateVisuals();
     }
 
     public void SetCellValue(int value)
@@ -55,5 +64,39 @@ public class Floor : MonoBehaviour
             case -1: return new Color(0.1f, 0.1f, 0.1f); // mine is dark gray
             default: return Color.clear; // Default: empty or invalid
         }
+    }
+
+    public void UpdateVisuals()
+    {
+        if (floorRenderer == null) return;
+
+        if (isBorder)
+        {
+            if (borderShapedMaterial != null && shapedLevel)
+            {
+                floorRenderer.material = borderShapedMaterial;
+            }
+            else if (borderSquareMaterial != null)
+            {
+                floorRenderer.material = borderSquareMaterial;
+            }
+        }
+        else
+        {
+            if (defaultMaterial != null)
+            {
+                floorRenderer.material = defaultMaterial;
+            }
+        }
+    }
+
+    public void SetBorder()
+    {
+        isBorder = true;
+    }
+
+    public void SetShapedLevel()
+    {
+        shapedLevel = true;
     }
 }

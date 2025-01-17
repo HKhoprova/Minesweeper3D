@@ -18,9 +18,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private UIManager uiManager;
 
     [Header("Grid Settings")]
-    [SerializeField] private int rows = 10;
-    [SerializeField] private int cols = 10;
-    [SerializeField] private int mineCount = 10;
+    public int rows = 10;
+    public int cols = 10;
+    public int mineCount = 10;
     private TileHolder[,] tileGrid;
     private Floor[,] floorGrid;
 
@@ -31,20 +31,36 @@ public class GameManager : MonoBehaviour
     private int revealCount = 0;
     private int notFlaggedMinesCount = 0;
     private int totalSafeTiles;
+    public bool isCustomShape = false;
+    public string shapeFilePath = ""; // Path to custom level shape
 
     private void Awake()
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(this.gameObject);
+        DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
     {
+        if (LevelManager.Instance != null && LevelManager.Instance.SelectedLevel != null)
+        {
+            Level selectedLevel = LevelManager.Instance.SelectedLevel;
+            rows = selectedLevel.Rows;
+            cols = selectedLevel.Cols;
+            mineCount = selectedLevel.Mines;
+
+            if (selectedLevel.IsCustomShape)
+            {
+                isCustomShape = true;
+                shapeFilePath = selectedLevel.ShapeFile;
+            }
+        }
+
         InitializeGame();
     }
 
@@ -60,7 +76,17 @@ public class GameManager : MonoBehaviour
 
         if (gridManager != null)
         {
-            gridManager.GenerateGrid();
+            gridManager.SetSize(rows, cols);
+
+            if (isCustomShape)
+            {
+                gridManager.LoadCustomShapeGrid(shapeFilePath);
+            }
+            else
+            {
+                gridManager.GenerateGrid();
+            }
+            
             tileGrid = gridManager.GetTileGrid();
             floorGrid = gridManager.GetFloorGrid();
         }
@@ -100,6 +126,8 @@ public class GameManager : MonoBehaviour
             {
                 Debug.LogError("Mine Manager reference is missing!");
             }
+
+            uiManager.ActivateTimer();
         }
 
         if (tile != null)
@@ -193,7 +221,7 @@ public class GameManager : MonoBehaviour
             {
                 for (int j = col - 1; j <= col + 1; j++)
                 {
-                    if (!mineManager.IsInBounds(i, j, rows, cols))
+                    if (!MineManager.IsInBounds(i, j, rows, cols) || tileGrid == null)
                         continue;
 
                     TileHolder checkTile = tileGrid[i, j];
@@ -233,10 +261,10 @@ public class GameManager : MonoBehaviour
         {
             for (int col = 0; col < cols; col++)
             {
-                TileHolder tile = tileGrid[row, col];
-
-                if (tile == null)
+                if (tileGrid[row, col] == null)
                     continue;
+
+                TileHolder tile = tileGrid[row, col];
 
                 if (mineManager.IsMine(row, col) && !tile.IsFlagged())
                 {
@@ -264,10 +292,10 @@ public class GameManager : MonoBehaviour
         {
             for (int col = 0; col < cols; col++)
             {
-                TileHolder tile = tileGrid[row, col];
-
-                if (tile == null)
+                if (tileGrid[row, col] == null)
                     continue;
+
+                TileHolder tile = tileGrid[row, col];
 
                 if (!tile.IsRevealed() && !tile.IsFlagged())
                 {
@@ -284,7 +312,14 @@ public class GameManager : MonoBehaviour
                     tile.MarkAsIncorrect();
                 }
             }
-
         }
+    }
+
+    public bool IsGameRunning()
+    {
+        if (currentGameState == GameState.Playing)
+            return true;
+        else
+            return false;
     }
 }

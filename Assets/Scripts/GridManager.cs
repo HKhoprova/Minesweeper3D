@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 public class GridManager : MonoBehaviour
 {
@@ -24,28 +26,17 @@ public class GridManager : MonoBehaviour
         tileGrid = new TileHolder[rows, cols];
         floorGrid = new Floor[rows, cols];
 
-        for (int x = -1; x <= rows; x++)
+        for (int row = -1; row <= rows; row++)
         {
-            for (int z = -1; z <= cols; z++)
+            for (int col = -1; col <= cols; col++)
             {
-                if (x == -1 || x == rows || z == -1 || z == cols)
+                if (row == -1 || row == rows || col == -1 || col == cols)
                 {
-                    var spawnedWall = Instantiate(wallPrefab, new Vector3(x, 0.4f, z), Quaternion.identity);
-                    spawnedWall.name = $"Wall {x} {z}"; 
-                    
-                    var spawnedFloorPart = Instantiate(floorPrefab, new Vector3(x, -0.5f, z), Quaternion.identity);
-                    spawnedFloorPart.name = $"Floor part {x} {z}";
+                    GenerateBorder(row, col, false, false);
                 }
                 else
                 {
-                    var spawnedTile = Instantiate(tilePrefab, new Vector3(x, -0.47f, z), Quaternion.identity);
-                    spawnedTile.name = $"Tile {x} {z}";
-                    spawnedTile.SetCoords(x, z);
-                    tileGrid[x, z] = spawnedTile;
-
-                    var spawnedFloorPart = Instantiate(floorPrefab, new Vector3(x, -0.5f, z), Quaternion.identity);
-                    spawnedFloorPart.name = $"Floor part {x} {z}";
-                    floorGrid[x, z] = spawnedFloorPart;
+                    GenerateTileFloor(row, col);
                 }
             }
         }
@@ -55,33 +46,96 @@ public class GridManager : MonoBehaviour
         playerRB.SetActive(true);
     }
 
-    public void LoadCustomShape(string filePath)
+    public void LoadCustomShapeGrid(string filePath)
     {
         string[] lines = System.IO.File.ReadAllLines(filePath);
-        int rows = lines.Length;
-        int cols = lines[0].Length;
+        rows = lines.Length;
+        cols = lines[0].Length;
 
         tileGrid = new TileHolder[rows, cols];
         floorGrid = new Floor[rows, cols];
 
-        for (int row = 0; row < rows; row++)
+        for (int row = -1; row <= rows; row++)
         {
-            for (int col = 0; col < cols; col++)
+            for (int col = -1; col <= cols; col++)
             {
-                if (lines[row][col] == '0')
+                if ((row == -1 || row == rows || col == -1 || col == cols) && CheckAdjacent(row, col, lines))
                 {
-                    // Generate tile and floor part
-                    var spawnedTile = Instantiate(tilePrefab, new Vector3(row, -0.49f, col), Quaternion.identity);
-                    spawnedTile.name = $"Tile {row} {col}";
-                    spawnedTile.SetCoords(row, col);
-                    tileGrid[row, col] = spawnedTile;
-
-                    var spawnedFloorPart = Instantiate(floorPrefab, new Vector3(row, -0.52f, col), Quaternion.identity);
-                    spawnedFloorPart.name = $"Floor part {row} {col}";
-                    floorGrid[row, col] = spawnedFloorPart;
+                    GenerateBorder(row, col, false, true);
+                }
+                else if (lines[row][col] == '0')
+                {
+                    if (CheckAdjacent(row, col, lines))
+                    {
+                        GenerateBorder(row, col, true, true);
+                    }
+                    else
+                    {
+                        tileGrid[row, col] = null;
+                        floorGrid[row, col] = null;
+                    }
+                }
+                else
+                {
+                    GenerateTileFloor(row, col);
                 }
             }
         }
+    }
+
+    private void GenerateTileFloor(int row, int col)
+    {
+        var spawnedTile = Instantiate(tilePrefab, new Vector3(row, -0.47f, col), Quaternion.identity);
+        spawnedTile.name = $"Tile {row} {col}";
+        spawnedTile.SetCoords(row, col);
+        tileGrid[row, col] = spawnedTile;
+
+        var spawnedFloorPart = Instantiate(floorPrefab, new Vector3(row, -0.5f, col), Quaternion.identity);
+        spawnedFloorPart.name = $"Floor part {row} {col}";
+        spawnedFloorPart.UpdateVisuals();
+        floorGrid[row, col] = spawnedFloorPart;
+    }
+
+    private void GenerateBorder(int row, int col, bool inBorder, bool shapedLevel)
+    {
+        var spawnedWall = Instantiate(wallPrefab, new Vector3(row, 0.4f, col), Quaternion.identity);
+        spawnedWall.name = $"Wall {row} {col}";
+
+        var spawnedFloorPart = Instantiate(floorPrefab, new Vector3(row, 0f, col), Quaternion.identity);
+        spawnedFloorPart.SetBorder();
+        if (shapedLevel)
+        {
+            spawnedFloorPart.SetShapedLevel();
+        }
+        spawnedFloorPart.UpdateVisuals();
+        spawnedFloorPart.name = $"Floor border part {row} {col}";
+
+        if (inBorder)
+        {
+            floorGrid[row, col] = spawnedFloorPart;
+        }
+    }
+
+    private bool CheckAdjacent(int row, int col, string[] lines)
+    {
+        for (int i = row - 1; i <= row + 1; i++)
+        {
+            for (int j = col - 1; j <= col + 1; j++)
+            {
+                if (MineManager.IsInBounds(i, j, rows, cols) && lines[i][j] == '1')
+                {
+                    return true; // Return true if there is a tile adjacent to this cell
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public void SetSize(int rows, int cols)
+    {
+        this.rows = rows;
+        this.cols = cols;
     }
 
     public TileHolder[,] GetTileGrid()
