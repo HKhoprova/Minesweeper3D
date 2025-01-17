@@ -53,11 +53,13 @@ public class GameManager : MonoBehaviour
             rows = selectedLevel.Rows;
             cols = selectedLevel.Cols;
             mineCount = selectedLevel.Mines;
+            totalSafeTiles = rows * cols - mineCount;
 
             if (selectedLevel.IsCustomShape)
             {
                 isCustomShape = true;
                 shapeFilePath = selectedLevel.ShapeFile;
+                totalSafeTiles = LevelManager.Instance.CountTilesInShapeFile(shapeFilePath) - mineCount;
             }
         }
 
@@ -69,7 +71,6 @@ public class GameManager : MonoBehaviour
         currentGameState = GameState.NotStarted;
 
         revealCount = 0;
-        totalSafeTiles = rows * cols - mineCount;
         notFlaggedMinesCount = mineCount;
         tileGrid = new TileHolder[rows, cols];
         floorGrid = new Floor[rows, cols];
@@ -221,7 +222,7 @@ public class GameManager : MonoBehaviour
             {
                 for (int j = col - 1; j <= col + 1; j++)
                 {
-                    if (!MineManager.IsInBounds(i, j, rows, cols) || tileGrid == null)
+                    if (!MineManager.IsInBounds(i, j, rows, cols) || tileGrid[i, j] == null)
                         continue;
 
                     TileHolder checkTile = tileGrid[i, j];
@@ -253,6 +254,8 @@ public class GameManager : MonoBehaviour
         }
 
         FlagAllMines();
+
+        LevelManager.Instance.LevelWon();
     }
 
     private void FlagAllMines()
@@ -321,5 +324,10 @@ public class GameManager : MonoBehaviour
             return true;
         else
             return false;
+    }
+
+    public bool IsTileNull(int row, int col)
+    {
+        return tileGrid[row, col] == null;
     }
 }

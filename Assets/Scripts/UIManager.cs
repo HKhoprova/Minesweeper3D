@@ -20,12 +20,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Timer timer;
 
     [Header("PauseCustomizing")]
-    [SerializeField] private GameObject pauseBg1;
-    [SerializeField] private GameObject pauseBg2;
-    [SerializeField] private Material UIShapedMaterial;
-    [SerializeField] private Material UISquareMaterial;
-    private Renderer bgRenderer1;
-    private Renderer bgRenderer2;
+    [SerializeField] private GameObject pauseBgSquared;
+    [SerializeField] private GameObject pauseBgShaped;
 
     private bool isGamePaused = false;
 
@@ -36,11 +32,6 @@ public class UIManager : MonoBehaviour
         losePanel.SetActive(false);
         timer.enabled = false;
         Time.timeScale = 1f;
-
-        bgRenderer1 = pauseBg1.GetComponent<Renderer>();
-        bgRenderer2 = pauseBg2.GetComponent<Renderer>();
-
-        WaitForGameManager();
     }
 
     private void Update()
@@ -62,6 +53,8 @@ public class UIManager : MonoBehaviour
             Time.timeScale = 0f;
             timer.enabled = false; // Stop the timer
             pausePanel.SetActive(true);
+            if (GameManager.Instance.isCustomShape) pauseBgShaped.SetActive(true);
+            else pauseBgSquared.SetActive(true);
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
@@ -72,6 +65,8 @@ public class UIManager : MonoBehaviour
             if (GameManager.Instance.IsGameRunning())
                 timer.enabled = true; // Resume the timer
             pausePanel.SetActive(false);
+            if (GameManager.Instance.isCustomShape) pauseBgShaped.SetActive(false);
+            else pauseBgSquared.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
@@ -129,21 +124,5 @@ public class UIManager : MonoBehaviour
     public bool IsGamePaused()
     {
         return isGamePaused;
-    }
-
-    private IEnumerator WaitForGameManager()
-    {
-        yield return new WaitForSeconds(0.1f);
-
-        if (UIShapedMaterial != null && GameManager.Instance != null && GameManager.Instance.isCustomShape)
-        {
-            bgRenderer1.material = UIShapedMaterial;
-            bgRenderer2.material = UIShapedMaterial;
-        }
-        else if (UISquareMaterial != null)
-        {
-            bgRenderer1.material = UISquareMaterial;
-            bgRenderer2.material = UISquareMaterial;
-        }
     }
 }

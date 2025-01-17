@@ -11,21 +11,6 @@ public class MineManager : MonoBehaviour
     {
         grid = new int[rows, cols];
 
-        if (rows < 10)
-        {
-            rows = 10;
-        }
-
-        if (cols < 10)
-        {
-            cols = 10;
-        }
-
-        if (mineCount >= rows * cols * 0.5f)
-        {
-            mineCount = rows * cols % 10;
-        }
-
         PlaceMines(grid, rows, cols, mineCount, safeTileCoords);
         CalculateNumbers(grid, rows, cols, floorGrid);
     }
@@ -39,7 +24,7 @@ public class MineManager : MonoBehaviour
             int row = UnityEngine.Random.Range(0, rows);
             int col = UnityEngine.Random.Range(0, cols);
 
-            if (IsInSafeZone(row, col, safeZone) || grid[row, col] == -1)
+            if (IsInSafeZone(row, col, safeZone) || grid[row, col] == -1 || GameManager.Instance.IsTileNull(row, col))
                 continue;
 
             grid[row, col] = -1;
@@ -62,7 +47,7 @@ public class MineManager : MonoBehaviour
         {
             for (int col = 0; col < cols; col++)
             {
-                if (floorGrid[row, col] == null)
+                if (floorGrid[row, col] == null || GameManager.Instance.IsTileNull(row, col))
                     continue;
 
                 if (grid[row, col] == -1)

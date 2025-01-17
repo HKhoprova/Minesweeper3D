@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI.Table;
@@ -40,15 +41,13 @@ public class GridManager : MonoBehaviour
                 }
             }
         }
-
-        playerRB.SetActive(false);
-        player.position = new Vector3((float)rows * 0.5f - 0.5f, 2f, (float)cols * 0.5f - 0.5f);
-        playerRB.SetActive(true);
+        TeleportPlayer(false);
     }
 
     public void LoadCustomShapeGrid(string filePath)
     {
-        string[] lines = System.IO.File.ReadAllLines(filePath);
+        filePath = Path.Combine(LevelManager.Instance.GetDocumentsPath(), filePath);
+        string[] lines = File.ReadAllLines(filePath);
         rows = lines.Length;
         cols = lines[0].Length;
 
@@ -59,9 +58,9 @@ public class GridManager : MonoBehaviour
         {
             for (int col = -1; col <= cols; col++)
             {
-                if ((row == -1 || row == rows || col == -1 || col == cols) && CheckAdjacent(row, col, lines))
+                if (row == -1 || row == rows || col == -1 || col == cols)
                 {
-                    GenerateBorder(row, col, false, true);
+                    if (CheckAdjacent(row, col, lines)) GenerateBorder(row, col, false, true);
                 }
                 else if (lines[row][col] == '0')
                 {
@@ -81,6 +80,7 @@ public class GridManager : MonoBehaviour
                 }
             }
         }
+        TeleportPlayer(true);
     }
 
     private void GenerateTileFloor(int row, int col)
@@ -130,6 +130,93 @@ public class GridManager : MonoBehaviour
         }
 
         return false;
+    }
+
+    private void TeleportPlayer(bool shapedLevel)
+    {
+        if (shapedLevel)
+        {
+            int x = rows / 2;
+            int z = cols / 2;
+            if (tileGrid[x, z] == null)
+            {
+                int xMin = rows / 2 - 1;
+                int xMax = rows / 2 + 1;
+                int zMin = cols / 2 - 1;
+                int zMax = cols / 2 + 1;
+                bool loop = true;
+                while (loop)
+                {
+                    for (int i = xMin; i <= xMax; i++)
+                    {
+                        if (tileGrid[i, zMin] != null)
+                        {
+                            x = i;
+                            z = zMin;
+                            loop = false;
+                        }
+                        else if (tileGrid[i, zMax] != null)
+                        {
+                            x = i;
+                            z = zMax;
+                            loop = false;
+                        }
+                    }
+                    for (int i = zMin + 1; i < zMax; i++)
+                    {
+                        if (tileGrid[xMin, i] != null)
+                        {
+                            x = xMin;
+                            z = i;
+                            loop = false;
+                        }
+                        else if (tileGrid[xMax, i] != null)
+                        {
+                            x = xMax;
+                            z = i;
+                            loop = false;
+                        }
+                    }
+
+                    bool changedAnyValue = false;
+                    if (xMin - 1 >= 0)
+                    {
+                        xMin--;
+                        changedAnyValue = true;
+                    }
+                    if (xMax + 1 < rows)
+                    {
+                        xMax++;
+                        changedAnyValue = true;
+                    }
+                    if (zMin - 1 >= 0)
+                    {
+                        zMin--;
+                        changedAnyValue = true;
+                    }
+                    if (zMax + 1 < cols)
+                    {
+                        zMax++;
+                        changedAnyValue = true;
+                    }
+                    
+                    if (changedAnyValue)
+                    {
+                        loop = false;
+                    }
+                }
+            }
+
+            playerRB.SetActive(false);
+            player.position = new Vector3((float)x, 2f, (float)z);
+            playerRB.SetActive(true);
+        }
+        else
+        {
+            playerRB.SetActive(false);
+            player.position = new Vector3((float)rows * 0.5f - 0.5f, 2f, (float)cols * 0.5f - 0.5f);
+            playerRB.SetActive(true);
+        }
     }
 
     public void SetSize(int rows, int cols)
