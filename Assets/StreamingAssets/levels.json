@@ -1,0 +1,123 @@
+{
+    "squareLevels": [
+        {
+            "Name": "Easy 1",
+            "Rows": 10,
+            "Cols": 10,
+            "Mines": 10,
+            "IsCustomShape": false,
+            "ShapeFile": "",
+            "IsUnlocked": true
+        },
+        {
+            "Name": "Easy 2",
+            "Rows": 10,
+            "Cols": 15,
+            "Mines": 15,
+            "IsCustomShape": false,
+            "ShapeFile": "",
+            "IsUnlocked": true
+        },
+        {
+            "Name": "Normal 1",
+            "Rows": 12,
+            "Cols": 12,
+            "Mines": 22,
+            "IsCustomShape": false,
+            "ShapeFile": "",
+            "IsUnlocked": true
+        },
+        {
+            "Name": "Normal 2",
+            "Rows": 12,
+            "Cols": 18,
+            "Mines": 32,
+            "IsCustomShape": false,
+            "ShapeFile": "",
+            "IsUnlocked": true
+        },
+        {
+            "Name": "Hard 1",
+            "Rows": 15,
+            "Cols": 15,
+            "Mines": 45,
+            "IsCustomShape": false,
+            "ShapeFile": "",
+            "IsUnlocked": true
+        },
+        {
+            "Name": "Hard 2",
+            "Rows": 15,
+            "Cols": 20,
+            "Mines": 60,
+            "IsCustomShape": false,
+            "ShapeFile": "",
+            "IsUnlocked": true
+        },
+        {
+            "Name": "Expert 1",
+            "Rows": 18,
+            "Cols": 18,
+            "Mines": 81,
+            "IsCustomShape": false,
+            "ShapeFile": "",
+            "IsUnlocked": true
+        },
+        {
+            "Name": "Expert 2",
+            "Rows": 18,
+            "Cols": 25,
+            "Mines": 113,
+            "IsCustomShape": false,
+            "ShapeFile": "",
+            "IsUnlocked": true
+        }
+    ],
+    "shapedLevels": [
+        {
+            "Name": "Flower",
+            "Rows": 17,
+            "Cols": 17,
+            "Mines": 35,
+            "IsCustomShape": true,
+            "ShapeFile": "shape1",
+            "IsUnlocked": true
+        },
+        {
+            "Name": "Heart",
+            "Rows": 17,
+            "Cols": 15,
+            "Mines": 30,
+            "IsCustomShape": true,
+            "ShapeFile": "shape2",
+            "IsUnlocked": true
+        },
+        {
+            "Name": "Circle",
+            "Rows": 15,
+            "Cols": 15,
+            "Mines": 35,
+            "IsCustomShape": true,
+            "ShapeFile": "shape3",
+            "IsUnlocked": true
+        },
+        {
+            "Name": "Clock",
+            "Rows": 21,
+            "Cols": 21,
+            "Mines": 70,
+            "IsCustomShape": true,
+            "ShapeFile": "shape4",
+            "IsUnlocked": true
+        },
+        {
+            "Name": "Five",
+            "Rows": 18,
+            "Cols": 27,
+            "Mines": 105,
+            "IsCustomShape": true,
+            "ShapeFile": "shape5",
+            "IsUnlocked": true
+        }
+    ]
+}

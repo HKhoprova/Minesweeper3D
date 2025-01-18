@@ -24,7 +24,7 @@ public class MineManager : MonoBehaviour
             int row = UnityEngine.Random.Range(0, rows);
             int col = UnityEngine.Random.Range(0, cols);
 
-            if (IsInSafeZone(row, col, safeZone) || grid[row, col] == -1)
+            if (IsInSafeZone(row, col, safeZone) || grid[row, col] == -1 || GameManager.Instance.IsTileNull(row, col))
                 continue;
 
             grid[row, col] = -1;
@@ -47,6 +47,9 @@ public class MineManager : MonoBehaviour
         {
             for (int col = 0; col < cols; col++)
             {
+                if (floorGrid[row, col] == null || GameManager.Instance.IsTileNull(row, col))
+                    continue;
+
                 if (grid[row, col] == -1)
                 {
                     floorGrid[row, col].SetCellValue(-1);
@@ -73,7 +76,7 @@ public class MineManager : MonoBehaviour
         }
     }
 
-    public bool IsInBounds(int row, int col, int rows, int cols)
+    public static bool IsInBounds(int row, int col, int rows, int cols)
     {
         return row >= 0 && row < rows && col >= 0 && col < cols;
     }

@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6cd73a6116c2c924f88c0b46b14d3cd0, type: 2}
+  - {fileID: 2100000, guid: a4b8800281f693646a056831740f9959, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -93,7 +93,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 110869152776901995}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 41e1f01b94952934eb8d9b4653d73c01, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -119,6 +119,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80ca64e65c9ad5a4ead6aa281e7e429c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultMaterial: {fileID: 2100000, guid: a4b8800281f693646a056831740f9959, type: 2}
+  borderShapedMaterial: {fileID: 2100000, guid: 630b8d21df6c3654eb547e45827ba7a3, type: 2}
+  borderSquareMaterial: {fileID: 2100000, guid: 7bdf83f7e39681242a909d0c42f79344, type: 2}
   textMeshPro: {fileID: 8452294224935777226}
 --- !u!1 &7086612976010484035
 GameObject:
@@ -185,7 +188,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -194,7 +197,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294901869
+    rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3

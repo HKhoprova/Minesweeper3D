@@ -1,95 +1,100 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    public enum TileState { NotFlagged, Flagged }
-    private int row, col;
-    private bool isFlagged = false;
-    private bool isRevealed = false;
+    private enum TileState { None, Flagged, Incorrect }
+    private TileState thisTileState = TileState.None;
 
     [SerializeField] private Material defaultMaterial;
     [SerializeField] private Material flaggedMaterial;
-    [SerializeField] private Transform flag; 
-    
+    [SerializeField] private Material incorrectMaterial;
+
     private Renderer tileRenderer;
-    private Collider tileCollider;
+    private Animator animator;
+
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+        animator.runtimeAnimatorController = Instantiate(animator.runtimeAnimatorController);
+    }
 
     private void Start()
     {
         tileRenderer = GetComponent<Renderer>();
-        tileCollider = GetComponent<Collider>();
         UpdateTileVisuals();
     }
 
-    public void ToggleFlag()
+    public void Flag()
     {
-        if (isRevealed)
-            return;
-
-        if (isFlagged) 
-            isFlagged = false;
-        else isFlagged = true;
-
+        thisTileState = TileState.Flagged;
         UpdateTileVisuals();
     }
 
-    public bool TryRevealTile()
+    public void UnFlag()
     {
-        if (isFlagged)
+        thisTileState = TileState.None;
+        UpdateTileVisuals();
+    }
+
+    public void SetIncorrect()
+    {
+        thisTileState = TileState.Incorrect;
+        UpdateTileVisuals();
+    }
+
+    public void Reveal(bool isGameLost, Collider tileCollider)
+    {
+        if (isGameLost)
         {
-            Debug.Log("Cannot reveal flagged tile.");
-            return false;
+            if (animator != null)
+            {
+                StartCoroutine(PlayAnimationAndWait(tileCollider));
+            }
         }
-
-        isRevealed = true;
-        tileRenderer.enabled = false;
-        tileCollider.enabled = false;
-        Debug.Log("Tile revealed: " + name);
-        return true;
+        else
+        {
+            tileCollider.gameObject.SetActive(false);
+        }
     }
 
     private void UpdateTileVisuals()
     {
         if (tileRenderer == null) return;
 
-        if (isFlagged)
+        if (thisTileState == TileState.None)
+        {
+            if (defaultMaterial != null)
+            {
+                tileRenderer.material = defaultMaterial;
+            }
+        }
+        else if (thisTileState == TileState.Flagged)
         {
             if (flaggedMaterial != null)
             {
                 tileRenderer.material = flaggedMaterial;
             }
-            if (flag != null)
+        }
+        else
+        {
+            if (incorrectMaterial != null)
             {
-                //place flag on tile
+                tileRenderer.material = incorrectMaterial;
             }
         }
-        else if (defaultMaterial != null)
-        {
-            tileRenderer.material = defaultMaterial;
-        }
     }
 
-    public bool IsFlagged()
+    private IEnumerator PlayAnimationAndWait(Collider tileCollider)
     {
-        return isFlagged;
-    }
+        animator.SetTrigger("Lost");
+        float animationLength = animator.runtimeAnimatorController.animationClips.First(clip => clip.name == "tileDisappear").length;
+        yield return new WaitForSeconds(animationLength);
 
-    public bool IsRevealed()
-    {
-        return isRevealed;
-    }
-
-    public void SetCoords(int row,  int col)
-    {
-        this.row = row;
-        this.col = col;
-    }
-
-    public Tuple<int, int> GetCoords()
-    {
-        return Tuple.Create(row, col);
+        tileCollider.gameObject.SetActive(false);
     }
 }
