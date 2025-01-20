@@ -46,7 +46,7 @@ public class GridManager : MonoBehaviour
 
     public void LoadCustomShapeGrid(string filePath)
     {
-        filePath = Path.Combine(LevelManager.Instance.GetDocumentsPath(), filePath);
+        filePath = Path.Combine(Application.streamingAssetsPath.Replace('/', '\\'), filePath);
         string[] lines = File.ReadAllLines(filePath);
         rows = lines.Length;
         cols = lines[0].Length;

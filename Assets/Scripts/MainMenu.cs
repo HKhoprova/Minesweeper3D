@@ -6,24 +6,11 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField] private GameObject images;
-    [SerializeField] private float interval = 1.5f;
-
-    private bool isVisible = true;
-
     private void Start()
     {
-        if (images == null)
-        {
-            images = gameObject;
-        }
-        InvokeRepeating(nameof(ToggleVisibility), interval, interval);
-    }
-
-    private void ToggleVisibility()
-    {
-        isVisible = !isVisible;
-        images.SetActive(isVisible);
+        // Set the game to run in windowed fullscreen mode
+        Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, FullScreenMode.FullScreenWindow);
+        Debug.Log("Set to Windowed Fullscreen Mode");
     }
 
     public void PlaySquare()
@@ -37,6 +24,7 @@ public class MainMenu : MonoBehaviour
 
     public void Quit()
     {
+        Debug.Log("Quitting application.");
         Application.Quit();
     }
 }

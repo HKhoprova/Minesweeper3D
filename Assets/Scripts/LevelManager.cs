@@ -70,9 +70,7 @@ public class LevelManager : MonoBehaviour
     }
     public string GetDocumentsPath()
     {
-        // After build path can be Documents/Minesweeper3D
-        // return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Minesweeper3D");
-        return Application.streamingAssetsPath.Replace('/', '\\');
+        return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Minesweeper3D").Replace('/', '\\');
     }
 
     private string GetLevelDataFilePath()
@@ -127,6 +125,24 @@ public class LevelManager : MonoBehaviour
 
     private void CreateDefaultLevelData()
     {
+        string filePath = Path.Combine(Application.streamingAssetsPath.Replace('/', '\\'), "levels.json");
+        if (File.Exists(filePath))
+        {
+            string json = File.ReadAllText(filePath);
+            LevelCollection levelData = JsonUtility.FromJson<LevelCollection>(json);
+
+            if (levelData != null &&
+            levelData.squareLevels != null &&
+            levelData.shapedLevels != null &&
+            levelData.squareLevels.Count > 0 &&
+            levelData.shapedLevels.Count > 0)
+            {
+                squareLevels = levelData.squareLevels;
+                shapedLevels = levelData.shapedLevels;
+                return;
+            }
+        }
+
         squareLevels = new List<Level>
         {
             new Level("Easy 1", 10, 10, 10, false, "", true),
@@ -271,7 +287,7 @@ public class LevelManager : MonoBehaviour
 
     public int CountTilesInShapeFile(string filePath)
     {
-        filePath = Path.Combine(GetDocumentsPath(), filePath);
+        filePath = Path.Combine(Application.streamingAssetsPath.Replace('/', '\\'), filePath);
         if (!File.Exists(filePath))
         {
             Debug.LogWarning("File doesn't exist: " + filePath);
