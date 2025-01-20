@@ -25,7 +25,7 @@
             "Mines": 22,
             "IsCustomShape": false,
             "ShapeFile": "",
-            "IsUnlocked": true
+            "IsUnlocked": false
         },
         {
             "Name": "Normal 2",
@@ -34,7 +34,7 @@
             "Mines": 32,
             "IsCustomShape": false,
             "ShapeFile": "",
-            "IsUnlocked": true
+            "IsUnlocked": false
         },
         {
             "Name": "Hard 1",
@@ -43,7 +43,7 @@
             "Mines": 45,
             "IsCustomShape": false,
             "ShapeFile": "",
-            "IsUnlocked": true
+            "IsUnlocked": false
         },
         {
             "Name": "Hard 2",
@@ -52,7 +52,7 @@
             "Mines": 60,
             "IsCustomShape": false,
             "ShapeFile": "",
-            "IsUnlocked": true
+            "IsUnlocked": false
         },
         {
             "Name": "Expert 1",
@@ -61,7 +61,7 @@
             "Mines": 81,
             "IsCustomShape": false,
             "ShapeFile": "",
-            "IsUnlocked": true
+            "IsUnlocked": false
         },
         {
             "Name": "Expert 2",
@@ -70,7 +70,7 @@
             "Mines": 113,
             "IsCustomShape": false,
             "ShapeFile": "",
-            "IsUnlocked": true
+            "IsUnlocked": false
         }
     ],
     "shapedLevels": [
@@ -90,7 +90,7 @@
             "Mines": 30,
             "IsCustomShape": true,
             "ShapeFile": "shape2",
-            "IsUnlocked": true
+            "IsUnlocked": false
         },
         {
             "Name": "Circle",
@@ -99,7 +99,7 @@
             "Mines": 35,
             "IsCustomShape": true,
             "ShapeFile": "shape3",
-            "IsUnlocked": true
+            "IsUnlocked": false
         },
         {
             "Name": "Clock",
@@ -108,7 +108,7 @@
             "Mines": 70,
             "IsCustomShape": true,
             "ShapeFile": "shape4",
-            "IsUnlocked": true
+            "IsUnlocked": false
         },
         {
             "Name": "Five",
@@ -117,7 +117,7 @@
             "Mines": 105,
             "IsCustomShape": true,
             "ShapeFile": "shape5",
-            "IsUnlocked": true
+            "IsUnlocked": false
         }
     ]
 }
