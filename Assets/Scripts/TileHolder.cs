@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TileHolder : MonoBehaviour
@@ -43,13 +41,16 @@ public class TileHolder : MonoBehaviour
         }
     }
 
-
-
     public bool TryRevealTile(bool isGameLost)
     {
         if (tile == null || isFlagged || isRevealed)
         {
             return false;
+        }
+
+        if (tileCollider == null)
+        {
+            tileCollider = GetComponent<Collider>();
         }
 
         tile.Reveal(isGameLost, tileCollider);

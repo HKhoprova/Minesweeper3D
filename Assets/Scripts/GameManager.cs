@@ -1,13 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using static UnityEngine.Rendering.DebugUI.Table;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance { get; private set; }
+    public static GameManager Instance { get; set; }
 
     private enum GameState { NotStarted, Playing, Won, Lost }
     private GameState currentGameState = GameState.NotStarted;
@@ -21,8 +17,8 @@ public class GameManager : MonoBehaviour
     public int rows = 10;
     public int cols = 10;
     public int mineCount = 10;
-    private TileHolder[,] tileGrid;
-    private Floor[,] floorGrid;
+    public TileHolder[,] tileGrid;
+    public Floor[,] floorGrid;
 
     [Header("Prefabs")]
     [SerializeField] private Mine minePrefab;

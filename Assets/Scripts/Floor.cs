@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -18,7 +16,6 @@ public class Floor : MonoBehaviour
     private void Start()
     {
         floorRenderer = GetComponent<Renderer>();
-        UpdateText();
         UpdateVisuals();
     }
 

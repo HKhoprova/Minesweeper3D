@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TutorialImages : MonoBehaviour
 {
-    [SerializeField] private GameObject imagesPrefab;
-    private GameObject imagesInstance;
+    public GameObject imagesPrefab;
+    public GameObject imagesInstance;
     [SerializeField] private float interval = 1.5f;
 
     private bool isVisible = true;
@@ -35,5 +33,15 @@ public class TutorialImages : MonoBehaviour
             Destroy(imagesInstance);
         }
         CancelInvoke(nameof(ToggleVisibility));
+    }
+
+    public void InitializeForTesting()
+    {
+        Start();
+    }
+
+    public void ToggleVisibilityForTesting()
+    {
+        ToggleVisibility();
     }
 }
