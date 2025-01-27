@@ -1,17 +1,14 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour
 {
-    public static LevelManager Instance { get; private set; }
+    public static LevelManager Instance { get; set; }
 
     public List<Level> squareLevels;
     public List<Level> shapedLevels;
@@ -336,6 +333,11 @@ public class LevelManager : MonoBehaviour
             }
         }
         SaveLevelData();
+    }
+
+    public void SetLevelNamesForTesting(TMP_Dropdown dropdown, List<Level> levels)
+    {
+        SetLevelNames(dropdown, levels);
     }
 }
 
